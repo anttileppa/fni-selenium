@@ -38,12 +38,6 @@ public class FrontPageTest {
     }
     extraCapabilities.put("general.useragent.locale", "en-US");
     
-    /* Windows 8.1 */
-    
-    // IE 11
-    
-    browsers.add(createBrowser(DesiredCapabilities.internetExplorer(), "Windows 8.1", "11", extraCapabilities));
-
     // Firefox 25
     
     browsers.add(createBrowser(DesiredCapabilities.firefox(), "Windows 8.1", "25", extraCapabilities));
