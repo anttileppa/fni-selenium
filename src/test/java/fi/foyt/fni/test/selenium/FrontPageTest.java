@@ -107,33 +107,9 @@ public class FrontPageTest extends GenericTest {
   }
   
   @Test
-  public void testFrontPageEn() throws Exception {
+  public void testFrontPage() throws Exception {
     driver.get(getStagingUnsecureUrl());
     assertEquals("Forge & Illusion", driver.getTitle());
-    
-    // Menu
-    
-    // Navigation link texts
-
-    WebElement logoLink = driver.findElement(By.cssSelector(".index-menu>a:first-child"));
-    WebElement forgeMenuLink = driver.findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(1)"));
-    WebElement gameLibraryMenuLink = driver.findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(2)"));
-    WebElement forumMenuLink = driver.findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(3)"));
-    WebElement aboutMenuLink = driver.findElement(By.cssSelector(".index-menu .menu-navigation-container>div.menu-about-container>a"));
-
-    assertEquals("Forge", forgeMenuLink.getText());
-    assertEquals("Game Library", gameLibraryMenuLink.getText());
-    assertEquals("Forum", forumMenuLink.getText());
-    assertEquals("About", aboutMenuLink.getText());
-
-    // Check menu links
-    
-    assertEquals(getStagingUnsecureUrl() + "/", stripLinkJSessionId(logoLink.getAttribute("href")));
-    assertEquals(getStagingUnsecureUrl() + "/forge/", stripLinkJSessionId(forgeMenuLink.getAttribute("href")));
-    assertEquals(getStagingUnsecureUrl() + "/gamelibrary/", stripLinkJSessionId(gameLibraryMenuLink.getAttribute("href")));
-    assertEquals(getStagingUnsecureUrl() + "/forum/", stripLinkJSessionId(forumMenuLink.getAttribute("href")));
-   
-    // TODO: About items
     
     // Check titles
     assertEquals("Forge & Illusion is an open platform built for roleplaying and roleplayers.", driver.findElement(By.cssSelector("p.index-description-text")).getText());
@@ -145,9 +121,47 @@ public class FrontPageTest extends GenericTest {
     assertEquals("More >>", driver.findElement(By.cssSelector(".index-gamelibrary-more")).getText());
     assertEquals("More >>", driver.findElement(By.cssSelector("a.index-forum-more")).getText());
     assertEquals("More >>", driver.findElement(By.cssSelector("a.index-blog-more")).getText());
+  }
+  
+  @Test
+  public void testNavigationMenu() {
+    driver.get(getStagingUnsecureUrl());
+    
+    // Navigation link texts
+
+    WebElement logoLink = driver.findElement(By.cssSelector(".index-menu>a:first-child"));
+    WebElement forgeMenuLink = driver.findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(1)"));
+    WebElement gameLibraryMenuLink = driver.findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(2)"));
+    WebElement forumMenuLink = driver.findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(3)"));
+
+    assertEquals("Forge", forgeMenuLink.getText());
+    assertEquals("Game Library", gameLibraryMenuLink.getText());
+    assertEquals("Forum", forumMenuLink.getText());
+
+    // Check menu links
+    
+    assertEquals(getStagingUnsecureUrl() + "/", stripLinkJSessionId(logoLink.getAttribute("href")));
+    assertEquals(getStagingUnsecureUrl() + "/forge/", stripLinkJSessionId(forgeMenuLink.getAttribute("href")));
+    assertEquals(getStagingUnsecureUrl() + "/gamelibrary/", stripLinkJSessionId(gameLibraryMenuLink.getAttribute("href")));
+    assertEquals(getStagingUnsecureUrl() + "/forum/", stripLinkJSessionId(forumMenuLink.getAttribute("href")));
+  }
+
+  @Test
+  public void testAboutMenu() {
+    driver.get(getStagingUnsecureUrl());
+    
+    WebElement aboutMenuLink = driver.findElement(By.cssSelector(".index-menu .menu-navigation-container>div.menu-about-container>a"));
+    WebElement aboutMenuList = driver.findElement(By.cssSelector(".menu-about-list"));
+
+    assertEquals("About", aboutMenuLink.getText());
+    
+    // Menu list should be hidden by default
+    assertEquals(false, aboutMenuList.isDisplayed());
     
     // Check about menu
     aboutMenuLink.click();
+
+    assertEquals(true, aboutMenuList.isDisplayed());
     
     WebElement aboutMenuVision = driver.findElement(By.cssSelector(".menu-about-list>ul:nth-child(1)>a"));
     WebElement aboutMenuInformation = driver.findElement(By.cssSelector(".menu-about-list>ul:nth-child(2)>a"));
@@ -184,11 +198,23 @@ public class FrontPageTest extends GenericTest {
     assertEquals("Open Source", aboutMenuOpenSource.getText());
     assertEquals(getStagingUnsecureUrl() + "/about#opensource", stripLinkJSessionId(aboutMenuOpenSource.getAttribute("href")));
     
-    assertEquals("Contacting Us", aboutMenuContact.getText());
+    assertEquals("Contacting us", aboutMenuContact.getText());
     assertEquals(getStagingUnsecureUrl() + "/about#contact", stripLinkJSessionId(aboutMenuContact.getAttribute("href")));
     
     assertEquals("Acknowledgements", aboutMenuAcknowledgements.getText());
     assertEquals(getStagingUnsecureUrl() + "/about#acknowledgements", stripLinkJSessionId(aboutMenuAcknowledgements.getAttribute("href")));
+
+    // Click somewhere else and the menu list should disappear
+    driver.findElement(By.cssSelector(".index-banner")).click();
+    assertEquals(false, aboutMenuList.isDisplayed());
+
+    // Click link again and the menu list should reappear
+    aboutMenuLink.click();
+    assertEquals(true, aboutMenuList.isDisplayed());
+    
+    // ... and stay visible after another click
+    aboutMenuLink.click();
+    assertEquals(true, aboutMenuList.isDisplayed());
   }
 
   @After
