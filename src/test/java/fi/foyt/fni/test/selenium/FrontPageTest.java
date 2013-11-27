@@ -217,6 +217,41 @@ public class FrontPageTest extends GenericTest {
     assertEquals(true, aboutMenuList.isDisplayed());
   }
 
+  @Test
+  public void testLocaleMenu() {
+    driver.get(getStagingUnsecureUrl());
+    
+    WebElement localeMenuLink = driver.findElement(By.cssSelector(".index-menu .menu-tools-container .menu-tools-locale"));
+    WebElement localeMenuList = driver.findElement(By.cssSelector(".menu-tools-locale-list"));
+
+    assertEquals("EN", localeMenuLink.getText());
+    
+    // Menu list should be hidden by default
+    assertEquals(false, localeMenuList.isDisplayed());
+    
+    // Click menu should make the list appear
+    localeMenuLink.click();
+    assertEquals(true, localeMenuList.isDisplayed());
+    
+    WebElement fiItem = driver.findElement(By.cssSelector(".menu-tools-locale-list>ul:nth-child(1)>a"));
+    WebElement enItem = driver.findElement(By.cssSelector(".menu-tools-locale-list>ul:nth-child(2)>a"));
+    
+    assertEquals("Suomi", fiItem.getText());
+    assertEquals("English", enItem.getText());
+
+    // Click somewhere else and the menu list should disappear
+    driver.findElement(By.cssSelector(".index-banner")).click();
+    assertEquals(false, localeMenuList.isDisplayed());
+
+    // Click link again and the menu list should reappear
+    localeMenuLink.click();
+    assertEquals(true, localeMenuList.isDisplayed());
+    
+    // ... and stay visible after another click
+    localeMenuLink.click();
+    assertEquals(true, localeMenuList.isDisplayed());
+  }
+
   @After
   public void tearDown() throws Exception {
     driver.quit();
