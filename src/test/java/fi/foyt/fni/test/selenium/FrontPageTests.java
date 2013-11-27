@@ -21,7 +21,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import com.saucelabs.junit.Parallelized;
   
 @RunWith(Parallelized.class)
-public class FrontPageTest extends GenericTest {
+public class FrontPageTests extends GenericTest {
   
   @Parameterized.Parameters
   public static LinkedList<DesiredCapabilities[]> browsers() throws Exception {
@@ -91,7 +91,7 @@ public class FrontPageTest extends GenericTest {
     return new DesiredCapabilities[] { capabilities };
   }
   
-  public FrontPageTest(DesiredCapabilities capabilities) {
+  public FrontPageTests(DesiredCapabilities capabilities) {
     super();
     
     this.capabilities = capabilities;
